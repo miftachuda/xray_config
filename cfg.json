@@ -1,0 +1,91 @@
+{
+  "log": {
+    "loglevel": "warning"
+  },
+  "policy": {
+    "0": {
+      "handshake": 4,
+      "connIdle": 300,
+      "uplinkOnly": 0,
+      "downlinkOnly": 0,
+      "bufferSize": 0
+    }
+  },
+  "inbounds": [
+    {
+      "port": 1080,
+      "listen": "127.0.0.1",
+      "protocol": "socks",
+      "settings": {
+        "udp": true
+      },
+      "sniffing": {
+        "enabled": false,
+        "destOverride": []
+      },
+      "tag": "socks"
+    },
+    {
+      "port": 8089,
+      "listen": "127.0.0.1",
+      "protocol": "http",
+      "timeout": 300,
+      "settings": {
+        "allowTransparent": true
+      },
+      "sniffing": {
+        "enabled": false,
+        "destOverride": []
+      },
+      "tag": "http"
+    }
+  ],
+  "outbounds": [
+    {
+      "protocol": "trojan",
+      "settings": {
+        "servers": [
+          {
+            "address": "id1-warna.adammau2.my.id",
+            "port": 443,
+            "password": "Auuv_4KGJrrbB08Si0E5vw"
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "ws",
+        "wsSettings": {
+          "path": "/trojan",
+          "headers": {
+            "host": "zoom.us"
+          }
+        },
+        "security": "tls",
+        "tlsSettings": {
+          "allowInsecure": true,
+          "allowInsecureCiphers": true,
+          "serverName": "zoom.us"
+        }
+      },
+      "tag": "proxy"
+    },
+    {
+      "protocol": "freedom",
+      "tag": "direct"
+    },
+    {
+      "protocol": "blackhole",
+      "settings": {
+        "response": {
+          "type": "http"
+        }
+      },
+      "tag": "block"
+    }
+  ],
+  "routing": {
+    "domainMatcher": "mph",
+    "domainStrategy": "IPIfNonMatch",
+    "rules": []
+  }
+}
